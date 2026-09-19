@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Puzzle Trainer</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 45 45%27%3E%3Crect width=%2745%27 height=%2745%27 fill=%27%23779556%27/%3E%3Ccircle cx=%2722.5%27 cy=%2722.5%27 r=%2712%27 fill=%27%23ebecd0%27/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="brand">
+    <svg class="brand-mark" viewBox="0 0 45 45" aria-hidden="true"><g class="shape"></g></svg>
+    <span class="brand-name">Puzzle Trainer</span>
+  </div>
+  <div class="top-stats">
+    <div class="tstat"><b id="statRating">—</b><span>rating</span></div>
+    <div class="tstat"><b id="statStreak">0</b><span>serie</span></div>
+    <div class="tstat"><b id="statSession">0</b><span>sesiune</span></div>
+    <div class="tstat"><b id="statSolved">0</b><span>rezolvate</span></div>
+    <div class="tstat"><b id="statAcc">—</b><span>precizie</span></div>
+  </div>
+</header>
+
+<main class="layout">
+
+  <div class="board-col">
+    <div class="board-shell">
+      <div id="board" class="board"></div>
+      <svg id="trails" class="trails" viewBox="0 0 8 8" preserveAspectRatio="none" aria-hidden="true"></svg>
+      <svg id="arrows" class="arrows" viewBox="0 0 8 8" preserveAspectRatio="none" aria-hidden="true"></svg>
+      <div id="dragLayer" class="drag-layer" hidden></div>
+      <div id="promo" class="promo" hidden>
+        <div class="promo-card">
+          <p>Promovează în</p>
+          <div class="promo-row" id="promoRow"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <aside class="side">
+
+    <div class="panel status" id="statusPanel">
+      <div class="status-icon" id="statusIcon"></div>
+      <div class="status-text">
+        <h2 id="statusTitle">Se încarcă…</h2>
+        <p id="statusMsg">Caut primul puzzle.</p>
+      </div>
+    </div>
+
+    <div class="panel info">
+      <div class="info-row">
+        <span class="info-label">Dificultate puzzle</span>
+        <span class="chip" id="puzzleRating">—</span>
+      </div>
+      <div class="themes" id="themeTags"></div>
+      <div class="line" id="lineBox" hidden>
+        <span class="info-label">Soluția</span>
+        <div class="line-moves" id="lineMoves"></div>
+      </div>
+    </div>
+
+    <div class="panel controls">
+      <div class="clock">
+        <svg viewBox="0 0 24 24" class="ico"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        <span id="clock">0:00</span>
+      </div>
+
+      <div class="ctrl-main" id="ctrlSolving">
+        <button id="btnHint"  class="btn">Indiciu</button>
+        <button id="btnSolve" class="btn">Soluția</button>
+      </div>
+
+      <div class="ctrl-main" id="ctrlWrong" hidden>
+        <button id="btnUndo"  class="btn btn-undo">Înapoi</button>
+        <button id="btnSolve2" class="btn">Soluția</button>
+      </div>
+
+      <div class="ctrl-main" id="ctrlDone" hidden>
+        <button id="btnRewind" class="btn btn-icon" title="Reia puzzle-ul de la început (R)">
+          <svg viewBox="0 0 24 24" class="ico"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5"/></svg>
+        </button>
+        <button id="btnNext" class="btn btn-go" title="Puzzle nou (N)">
+          <svg viewBox="0 0 24 24" class="ico"><path d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+
+      <div class="ctrl-nav">
+        <button id="navPrev" class="nav" title="O mutare înapoi (←)">‹</button>
+        <button id="navNext" class="nav" title="O mutare înainte (→)">›</button>
+      </div>
+    </div>
+
+    <details class="panel filters" id="filterPanel">
+      <summary>Filtre</summary>
+
+      <label class="field">
+        <span class="field-label">Temă</span>
+        <select id="themeSel"></select>
+      </label>
+
+      <div class="field">
+        <span class="field-label">
+          Dificultate
+          <button class="mini" id="btnAuto">auto</button>
+        </span>
+        <div class="range-row">
+          <input type="number" id="minRating" min="0" max="3500" step="50" value="800">
+          <span class="dash">–</span>
+          <input type="number" id="maxRating" min="0" max="3500" step="50" value="1400">
+        </div>
+      </div>
+
+      <label class="check">
+        <input type="checkbox" id="unseen" checked><span>Doar puzzle-uri nevăzute</span>
+      </label>
+    </details>
+
+    <div class="panel look">
+      <label class="field">
+        <span class="field-label">Piese</span>
+        <select id="pieceSel"></select>
+      </label>
+      <div class="field">
+        <span class="field-label">Mărimea tablei <b id="zoomVal">100%</b></span>
+        <input type="range" id="zoomRange" min="70" max="140" step="5" value="100">
+      </div>
+    </div>
+
+    <div class="panel foot">
+      <span id="poolInfo">—</span>
+      <span id="lifetime" class="lifetime">—</span>
+      <div class="foot-row">
+        <a id="gameLink" href="#" target="_blank" rel="noopener">Partida originală</a>
+        <button id="btnReset" class="linkish">Resetează progresul</button>
+      </div>
+      <p class="credit">
+        Click dreapta trage o săgeată; click dreapta pe un pătrat îl marchează.
+        La o mutare greșită, săgeata roșie arată replica adversarului.
+      </p>
+      <p class="credit" id="pieceCredit" hidden></p>
+    </div>
+
+  </aside>
+</main>
+
+<script src="pieces.js"></script>
+<script src="chess-core.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

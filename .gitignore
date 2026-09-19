@@ -1,0 +1,23 @@
+# Baza de puzzle-uri: ~1,5 GB, se construieste local cu "python setup.py".
+# GitHub refuza fisiere peste 100 MB, deci nu are ce cauta in repo.
+puzzles.db
+puzzles.db-journal
+puzzles.db-wal
+puzzles.db-shm
+
+# arhiva descarcata de setup.py
+*.csv.zst
+lichess_db_puzzle.csv
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# IDE / sistem
+.idea/
+.vscode/
+Thumbs.db
+desktop.ini
+.DS_Store
